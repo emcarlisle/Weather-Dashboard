@@ -19,8 +19,9 @@
     </div>
 
     <div class="container">
+        <!--search-->
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-6 col-md-4 card">
                 <!--This will be where users input data for city search-->
                 <form id="search-form">
                     <h3>Search for a City: </h3>
@@ -28,22 +29,28 @@
                     <!--This button will trigger the AJAX call-->
                     <button type="search" id="input-city" class="btn btn-primary fas fa-search"></button>
                 </form>
+                <section class="row" id="recent-searches"></section>
             </div>
         </div>
+        <!--results-->
+        <main class="col-md-8 card">
+            <section>
+                <div class="row col-md-8 card" id="current-weather">
+                    <h2 class="row ml-2 mt-3" id="city">
+                        
+                    </h2>    
+                    <div id="current-date"></div>
+                    <div id="icon"></div>
+                    <div id="tempF"></div>
+                    <div id="humidity"></div>
+                    <div id="wind-speed"></div>
+                    <div id="uv-index"></div>
+                    </div>
+                </div>
+            </section>
 
-        <div class="col-lg-8">
-            <div class="row" id="current-weather">
-                <!--Retrieved data will be dumped here-->
-                <div id="city"></div>
-                <div id="current-date"></div>
-                <div id="icon"></div>
-                <div id="tempF"></div>
-                <div id="humidity"></div>
-                <div id="wind-speed"></div>
-                <div id="uv-index"></div>
-            </div>
-        </div>
-
+        </main>
+        
 
     </div>
 
@@ -77,7 +84,7 @@
                 //var icon = $("#icon").text.JSON.stringify(response.weather[0].icon);
                 $("#city").html("<h1>" + response.name + "</h1>");
                 var currentDate = $("#current-date").text(moment().format("LL"));
-                //$("#icon").text(response.weather[0].icon);
+                console.log(currentDate);
                 //var tempF = (response.main.temp - 273.15) * 1.80 + 32;
                 $("#tempF").text("Temperature: " + response.main.temp + " °F");
                 $("#humidity").text("Humidity: " + response.main.humidity + " %");
@@ -85,37 +92,18 @@
                 //$("#uv-index").text("UV Index: " + response.)
                 var lat = response.coord.lat;
                 var lon = response.coord.lon;
+                //var currentWeatherIcon = response.current.weather.icon;
+                //var currentWeatherIconURL = "https://openweathermap.org/img/w/" + currentWeatherIcon + ".png";
                 var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
                 $.ajax({
                     url: queryURL,
                     method: "GET"
                 }).then(function (response) {
                     console.log(response);
-
-
-
-
-                    //var uvEl = parseFloat(response.current.uvi.toFixed(1));
-                    //$('#uv-index').text(uvEl)
-
+                    $("#uv-index").text("UV Index: " + response.current.uvi);
+                    //$("#icon").text(currentWeatherIconURL)
                 })
             });
-
-            //$.ajax({
-            //    url: queryURL,
-            //    method: "GET"
-            //}).then(function (response) {
-            //    console.log(response);
-            //
-            //    var lat = response.coord.lat;
-            //    var lon = response.coord.lon;
-            //    var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + 52.23 + "&lon=" + 21.01 + "&appid" + APIKey;
-            //
-            //    //var uvEl = parseFloat(response.current.uvi.toFixed(1));
-            //    //$('#uv-index').text(uvEl)
-            //
-            //})
-
 
 
 
