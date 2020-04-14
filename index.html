@@ -21,8 +21,8 @@
     <div class="container">
         <!--search-->
         <div class="row">
-            <div class="col-6 col-md-4 card">
-                
+            <div class="col-md-4 card">
+
                 <form id="search-form">
                     <h3>Search for a City: </h3>
                     <!--This will be where users input data for city search-->
@@ -30,8 +30,11 @@
                     <!--This button will trigger the AJAX call-->
                     <button type="search" id="input-city" class="btn btn-primary fas fa-search"></button>
                 </form>
-                <section class="row" id="recent-searches"></section>
+                <div class="card hide" id="recent-search-card">
+                    <ul class="list-group" id="recent-search-list"></ul>
+                </div>
             </div>
+
             <!--results-->
             <main class="col-md-8 card">
                 <section>
@@ -45,30 +48,28 @@
                         <div id="wind-speed"></div>
                         <div id="uv-index"></div>
                     </div>
-                    </div>
-                </section>
-            
-            </main>
         </div>
-        
-        
-            
-            
-        
+        </section>
+
+        </main>
+    </div>
+
+
+
+
+
 
     </div>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
+        // array of searched cities
+        var recentSearchList = [];
+
+
         // API key
         var APIKey = "24c3d63ab0643cc9bf93688784d9ccba";
-        // grabbing ID for city
-        //var city = $("#city")
-        // URL to query the database
-
-
-
         $("#input-city").on("click", function (event) {
             event.preventDefault();
             var searchCity = $("#city-input").val();
@@ -80,45 +81,51 @@
                 url: queryURL,
                 method: "GET"
             }).then(function (response) {
-                //log the queryURL
-                //$("#city").text(JSON.stringify(response));
-                //log the resulting object
                 console.log(response);
 
-                //var icon = $("#icon").text.JSON.stringify(response.weather[0].icon);
                 $("#city").html("<h1>" + response.name + "</h1>");
+                var searchCity = $("#city-input").val();
                 var currentDate = $("#current-date").text(moment().format("LL"));
                 
-                //var tempF = (response.main.temp - 273.15) * 1.80 + 32;
+                recentSearchList.push(searchCity);
+                localStorage.setItem(recentSearchList, JSON.stringify(searchCity));
+                console.log(recentSearchList);
+                 // working on pushing values into array, how to see what
+                    // is in that array, getting those values to persist
+
+
+
                 $("#tempF").text("Temperature: " + response.main.temp + " °F");
                 $("#humidity").text("Humidity: " + response.main.humidity + " %");
                 $("#wind-speed").text("Wind Speed: " + response.wind.speed + " MPH");
-                //$("#uv-index").text("UV Index: " + response.)
+
                 var lat = response.coord.lat;
                 var lon = response.coord.lon;
-                
+
                 var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
                 $.ajax({
                     url: queryURL,
                     method: "GET"
                 }).then(function (response) {
                     console.log(response);
-                    
+
                     $("#uv-index").text("UV Index: " + response.current.uvi);
-                    //$("#icon").text(currentWeatherIcon);
+
                 });
-                
+
                 var currentWeatherIcon = response.weather[0].icon;
                 var currentWeatherIconURL = "http://openweathermap.org/img/wn/" + currentWeatherIcon + ".png";
                 $.ajax({
                     url: currentWeatherIconURL,
                     method: "GET"
-                }).then(function(response) {
-                    //console.log(String.valueOf(response));
+                }).then(function (response) {
+
 
                     $("#currentIcon").attr("src", currentWeatherIconURL);
                     $("#currentIcon").html("<img>" + currentWeatherIcon + "</img>");
-                })
+                });
+
+
 
 
 
