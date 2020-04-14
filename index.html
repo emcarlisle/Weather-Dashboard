@@ -14,6 +14,7 @@
       integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
       crossorigin="anonymous"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <title>Weather Dashboard</title>
 </head>
 
@@ -41,7 +42,7 @@
                 <div id="city"></div>
                 <div id="current-date"></div>
                 <div id="icon"></div>
-                <div id="temp"></div>
+                <div id="tempF"></div>
                 <div id="humidity"></div>
                 <div id="wind-speed"></div>
                 <div id="uv-index"></div>
@@ -59,28 +60,43 @@
         // grabbing ID for city
         //var city = $("#city")
         // URL to query the database
-        var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=60.99&lon=30.9&appid=" + APIKey; 
+        
+        
+
+        $("#input-city").on("click", function(event) {
+            event.preventDefault();
+            var searchCity = $("#city-input").val();
+            var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&units=imperial&appid=" + APIKey; 
 
 
-        // AJAX call to the OpenWeather API
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        }).then(function(response) {
-            //log the queryURL
-            console.log(queryURL);
-            //log the resulting object
-            console.log(response);
+            // AJAX call to the OpenWeather API
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function (response) {
+                //log the queryURL
+                //$("#city").text(JSON.stringify(response));
+                //log the resulting object
+                console.log(response);
+
+                $("#city").html("<h1>" + response.name + "</h1>");
+                var currentDate = $("#current-date").text(moment().format("LL"));
+                //$("#icon").text(response.weather[0].icon);
+                //var tempF = (response.main.temp - 273.15) * 1.80 + 32;
+                $("#tempF").text("Temperature: " + response.main.temp + " °F");
+                $("#humidity").text("Humidity: " + response.main.humidity + " %");
+                $("#wind-speed").text("Wind Speed: " + response.wind.speed + " MPH");
 
 
 
 
 
 
+            });
 
+        })
 
-            
-        });
+        
 
         
     
