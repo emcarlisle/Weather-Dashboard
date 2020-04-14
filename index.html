@@ -22,34 +22,38 @@
         <!--search-->
         <div class="row">
             <div class="col-6 col-md-4 card">
-                <!--This will be where users input data for city search-->
+                
                 <form id="search-form">
                     <h3>Search for a City: </h3>
+                    <!--This will be where users input data for city search-->
                     <input type="text" id="city-input">
                     <!--This button will trigger the AJAX call-->
                     <button type="search" id="input-city" class="btn btn-primary fas fa-search"></button>
                 </form>
                 <section class="row" id="recent-searches"></section>
             </div>
-        </div>
-        <!--results-->
-        <main class="col-md-8 card">
-            <section>
-                <div class="row col-md-8 card" id="current-weather">
-                    <h2 class="row ml-2 mt-3" id="city">
-                        <div id="current-date"></div> 
-                    </h2>    
-                    <!--<div id="current-date"></div-->
-                    <div id="icon"><img id="currentIcon" src=""></div>
-                    <div id="tempF"></div>
-                    <div id="humidity"></div>
-                    <div id="wind-speed"></div>
-                    <div id="uv-index"></div>
+            <!--results-->
+            <main class="col-md-8 card">
+                <section>
+                    <div class="row col-md-8 card" id="current-weather">
+                        <h2 class="row ml-2 mt-3" id="city">
+                        </h2>
+                        <div id="current-date"></div>
+                        <div id="icon"><img id="currentIcon" src=""></div>
+                        <div id="tempF"></div>
+                        <div id="humidity"></div>
+                        <div id="wind-speed"></div>
+                        <div id="uv-index"></div>
                     </div>
-                </div>
-            </section>
-
-        </main>
+                    </div>
+                </section>
+            
+            </main>
+        </div>
+        
+        
+            
+            
         
 
     </div>
