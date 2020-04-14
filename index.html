@@ -6,14 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-      crossorigin="anonymous"
-    />
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <title>Weather Dashboard</title>
 </head>
@@ -33,7 +28,7 @@
                     <!--This button will trigger the AJAX call-->
                     <button type="search" id="input-city" class="btn btn-primary fas fa-search"></button>
                 </form>
-            </div>     
+            </div>
         </div>
 
         <div class="col-lg-8">
@@ -48,10 +43,10 @@
                 <div id="uv-index"></div>
             </div>
         </div>
-        
-   
+
+
     </div>
-    
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
@@ -60,13 +55,13 @@
         // grabbing ID for city
         //var city = $("#city")
         // URL to query the database
-        
-        
 
-        $("#input-city").on("click", function(event) {
+
+
+        $("#input-city").on("click", function (event) {
             event.preventDefault();
             var searchCity = $("#city-input").val();
-            var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&units=imperial&appid=" + APIKey; 
+            var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&units=imperial&appid=" + APIKey;
 
 
             // AJAX call to the OpenWeather API
@@ -79,6 +74,7 @@
                 //log the resulting object
                 console.log(response);
 
+                //var icon = $("#icon").text.JSON.stringify(response.weather[0].icon);
                 $("#city").html("<h1>" + response.name + "</h1>");
                 var currentDate = $("#current-date").text(moment().format("LL"));
                 //$("#icon").text(response.weather[0].icon);
@@ -86,23 +82,52 @@
                 $("#tempF").text("Temperature: " + response.main.temp + " °F");
                 $("#humidity").text("Humidity: " + response.main.humidity + " %");
                 $("#wind-speed").text("Wind Speed: " + response.wind.speed + " MPH");
-                $("#uv-index").text("UV Index: " + response.)
+                //$("#uv-index").text("UV Index: " + response.)
+                var lat = response.coord.lat;
+                var lon = response.coord.lon;
+                var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function (response) {
+                    console.log(response);
 
 
 
 
+                    //var uvEl = parseFloat(response.current.uvi.toFixed(1));
+                    //$('#uv-index').text(uvEl)
 
-
+                })
             });
 
-        })
+            //$.ajax({
+            //    url: queryURL,
+            //    method: "GET"
+            //}).then(function (response) {
+            //    console.log(response);
+            //
+            //    var lat = response.coord.lat;
+            //    var lon = response.coord.lon;
+            //    var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + 52.23 + "&lon=" + 21.01 + "&appid" + APIKey;
+            //
+            //    //var uvEl = parseFloat(response.current.uvi.toFixed(1));
+            //    //$('#uv-index').text(uvEl)
+            //
+            //})
 
-        
 
-        
-    
-    
-    
+
+
+
+        });
+
+
+
+
+
+
+
     </script>
 </body>
 
