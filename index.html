@@ -31,7 +31,7 @@
                     <button type="search" id="input-city" class="btn btn-primary fas fa-search"></button>
                 </form>
                 <div class="card hide" id="recent-search-card">
-                    <ul class="list-group" id="recent-search-list"></ul>
+                    <ul class="list-group list-group-flush" id="recent-search-list"></ul>
                 </div>
             </div>
 
@@ -48,10 +48,38 @@
                         <div id="wind-speed"></div>
                         <div id="uv-index"></div>
                     </div>
+                </section>
+            </main>
         </div>
+
+        <!--Five day forecast-->
+        <section class="five-day-forecast">
+            <div class="row">
+                <h2 class="row mt-3 ml-2 mb-4">5 Day Forecast: </h2>
+            </div>
+            <div class="row" id="five-day-forecast">
+                <div class="card-deck">
+                    <div class="card">
+                        <div class="card-body">
+                            <p id="day1"></p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p id="day2"></p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                        <p id="day3"></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
-        </main>
+
     </div>
 
 
@@ -64,10 +92,19 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
+        //if (localStorage.getItem("recentSearchList")) {
+        //    var recentSearchList = localStorage.getItem("recentSearchHistory").split(",");
+        //    console.log(recentSearchList);
+        //    for (var i=0; i < recentSearchList.length; i++) {
+        //        var recentSearches = $("#recent-searches-list");
+        //        var newBtn = $("<button class='btn btn-link btn-lg active historyBtn'>").text(recentSearchList[i]);
+        //    }
+        //} else {
+        //    var recentSearchList = [];
+        //}
         // array of searched cities
         var recentSearchList = [];
-
-
+        var retrieveSearched = localStorage.getItem("recentSearchList");
         // API key
         var APIKey = "24c3d63ab0643cc9bf93688784d9ccba";
         $("#input-city").on("click", function (event) {
@@ -75,7 +112,12 @@
             var searchCity = $("#city-input").val();
             var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&units=imperial&appid=" + APIKey;
 
-
+            recentSearchList.push(searchCity);
+            localStorage.setItem("recentSearchList", searchCity);
+            if (recentSearchList.length === 1) {
+                $("#recent-search-card").removeClass("hide");
+            }
+            console.log(recentSearchList);
             // AJAX call to the OpenWeather API
             $.ajax({
                 url: queryURL,
@@ -84,14 +126,14 @@
                 console.log(response);
 
                 $("#city").html("<h1>" + response.name + "</h1>");
-                var searchCity = $("#city-input").val();
+                //var searchCity = $("#city-input").val();
                 var currentDate = $("#current-date").text(moment().format("LL"));
-                
-                recentSearchList.push(searchCity);
-                localStorage.setItem(recentSearchList, JSON.stringify(searchCity));
-                console.log(recentSearchList);
-                 // working on pushing values into array, how to see what
-                    // is in that array, getting those values to persist
+                //localStorage.getItem("recentSearchList");
+                //console.log(recentSearchList);
+
+                // working on pushing values into array, how to see what
+                // is in that array, getting those values to persist
+                //working on removing hide from searched cities list
 
 
 
@@ -108,9 +150,12 @@
                     method: "GET"
                 }).then(function (response) {
                     console.log(response);
-
                     $("#uv-index").text("UV Index: " + response.current.uvi);
 
+                    var day1 = $("#day1").text(moment().add(1, "days").format("LL"));
+                    var day2 = $("#day2").text(moment().add(2, "days").format("LL"));
+                    var day3 = $("#day3").text(moment().add(3, "days").format("LL"));
+                    
                 });
 
                 var currentWeatherIcon = response.weather[0].icon;
