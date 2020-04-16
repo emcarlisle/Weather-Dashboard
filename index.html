@@ -28,9 +28,9 @@
                     <!--This will be where users input data for city search-->
                     <input type="text" id="city-input">
                     <!--This button will trigger the AJAX call-->
-                    <button type="search" id="input-city" class="btn btn-primary fas fa-search"></button>
+                    <button type="search" id="search-city" class="btn btn-primary fas fa-search"></button>
                 </form>
-                <div class="card hide" id="recent-search-card">
+                <div class="card" id="recent-search-card">
                     <ul class="list-group list-group-flush" id="recent-search-list"></ul>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                        <p id="day3"></p>
+                            <p id="day3"></p>
                         </div>
                     </div>
 
@@ -92,28 +92,47 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
-        //if (localStorage.getItem("recentSearchList")) {
-        //    var recentSearchList = localStorage.getItem("recentSearchHistory").split(",");
-        //    console.log(recentSearchList);
-        //    for (var i=0; i < recentSearchList.length; i++) {
-        //        var recentSearches = $("#recent-searches-list");
-        //        var newBtn = $("<button class='btn btn-link btn-lg active historyBtn'>").text(recentSearchList[i]);
-        //    }
-        //} else {
-        //    var recentSearchList = [];
-        //}
-        // array of searched cities
+        var cityInput = $("#city-input");
+        var searchList = $("#recent-search-list");
+
         var recentSearchList = [];
-        var retrieveSearched = localStorage.getItem("recentSearchList");
+        retrieve();
+
+        function renderSearch() {
+            searchList.innerHTML = "";
+            for (var i = 0; i < recentSearchList.length; i++) {
+                var recentSearches = recentSearchList[i];
+
+                var newBtn = $("<button class='btn btn-link btn-lg active historyBtn'>").text(recentSearchList[i]);
+                recentSearches.append(newBtn);
+                //console.log(retrieveSearched);
+            }
+
+        }
+
+        function retrieve() {
+            var storedSearch = JSON.parse(localStorage.getItem("recentSearchList"));
+            if (storedSearch !== null) {
+                recentSearchList = storedSearch;
+            }
+            renderSearch();
+        }
+        
+        function storedSearch() {
+            localStorage.setItem("recentSearchList", JSON.stringify(recentSearchList));
+        }
+        
+
         // API key
         var APIKey = "24c3d63ab0643cc9bf93688784d9ccba";
-        $("#input-city").on("click", function (event) {
+        $("#search-city").on("click", function (event) {
             event.preventDefault();
             var searchCity = $("#city-input").val();
             var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&units=imperial&appid=" + APIKey;
 
             recentSearchList.push(searchCity);
-            localStorage.setItem("recentSearchList", searchCity);
+            cityInput.value = "";
+            //localStorage.setItem("retrieveSearched", searchCity);
             if (recentSearchList.length === 1) {
                 $("#recent-search-card").removeClass("hide");
             }
@@ -155,7 +174,7 @@
                     var day1 = $("#day1").text(moment().add(1, "days").format("LL"));
                     var day2 = $("#day2").text(moment().add(2, "days").format("LL"));
                     var day3 = $("#day3").text(moment().add(3, "days").format("LL"));
-                    
+
                 });
 
                 var currentWeatherIcon = response.weather[0].icon;
