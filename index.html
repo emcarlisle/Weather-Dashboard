@@ -100,11 +100,12 @@
 
         function renderSearch() {
             searchList.innerHTML = "";
+            console.log()
             for (var i = 0; i < recentSearchList.length; i++) {
                 var recentSearches = recentSearchList[i];
 
-                var newBtn = $("<button class='btn btn-link btn-lg active historyBtn'>").text(recentSearchList[i]);
-                recentSearches.append(newBtn);
+                var newCity = $("<li>").addClass("list-group-item").text(recentSearchList[i]);
+                searchList.append(newCity);
                 //console.log(retrieveSearched);
             }
 
@@ -128,16 +129,22 @@
         $("#search-city").on("click", function (event) {
             event.preventDefault();
             var searchCity = $("#city-input").val();
-            var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&units=imperial&appid=" + APIKey;
+            
 
             recentSearchList.push(searchCity);
+            storedSearch();
             cityInput.value = "";
-            //localStorage.setItem("retrieveSearched", searchCity);
-            if (recentSearchList.length === 1) {
-                $("#recent-search-card").removeClass("hide");
-            }
-            console.log(recentSearchList);
-            // AJAX call to the OpenWeather API
+            citySearch(searchCity);
+            
+        });
+
+
+
+
+
+
+        function citySearch(searchCity) {
+            var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&units=imperial&appid=" + APIKey;
             $.ajax({
                 url: queryURL,
                 method: "GET"
@@ -147,12 +154,7 @@
                 $("#city").html("<h1>" + response.name + "</h1>");
                 //var searchCity = $("#city-input").val();
                 var currentDate = $("#current-date").text(moment().format("LL"));
-                //localStorage.getItem("recentSearchList");
-                //console.log(recentSearchList);
-
-                // working on pushing values into array, how to see what
-                // is in that array, getting those values to persist
-                //working on removing hide from searched cities list
+               
 
 
 
@@ -199,14 +201,7 @@
 
 
             });
-
-
-
-
-        });
-
-
-
+        }
 
 
 
