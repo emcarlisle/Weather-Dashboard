@@ -31,7 +31,7 @@
                     <button type="search" id="search-city" class="btn btn-primary fas fa-search"></button>
                 </form>
                 <div class="card" id="recent-search-card">
-                    <ul class="list-group list-group-flush" id="recent-search-list"></ul>
+                    <div class="list-group list-group-flush" id="recent-search-list"></div>
                 </div>
             </div>
 
@@ -100,11 +100,11 @@
 
         function renderSearch() {
             searchList.innerHTML = "";
-            console.log()
+
             for (var i = 0; i < recentSearchList.length; i++) {
                 var recentSearches = recentSearchList[i];
 
-                var newCity = $("<li>").addClass("list-group-item").text(recentSearchList[i]);
+                var newCity = $("<button>").addClass("list-group-item list-group-item-action").text(recentSearchList[i]);
                 searchList.append(newCity);
                 //console.log(retrieveSearched);
             }
@@ -126,10 +126,29 @@
 
         // API key
         var APIKey = "24c3d63ab0643cc9bf93688784d9ccba";
+
+        // this displays city searched from text input box
         $("#search-city").on("click", function (event) {
             event.preventDefault();
             var searchCity = $("#city-input").val();
+            if (searchCity === "") {
+                return;
+            }
+
+            recentSearchList.push(searchCity);
+            storedSearch();
+            cityInput.value = "";
+            citySearch(searchCity);
             
+        });
+        // this is displaying from recent search history
+        $(".list-group-item").on("click", function (event) {
+            event.preventDefault();
+            var searchCity = this.textContent;
+            //console.log(this.textContent);
+            if (searchCity === "") {
+                return;
+            }
 
             recentSearchList.push(searchCity);
             storedSearch();
@@ -162,9 +181,12 @@
                 $("#humidity").text("Humidity: " + response.main.humidity + " %");
                 $("#wind-speed").text("Wind Speed: " + response.wind.speed + " MPH");
 
+
+
+
                 var lat = response.coord.lat;
                 var lon = response.coord.lon;
-
+                // new function here
                 var queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
                 $.ajax({
                     url: queryURL,
@@ -192,9 +214,13 @@
                 });
 
 
+                // function with a for loop
+                // in that for loop, make ajax calls for uvi,icon, ..
+                // assign those to a variable
+                // create a card, input all variables into appropriate order
+                //append to the card-deck
 
-
-
+                // var day = $("#day1").text(moment().add(1, "days").format("LL"));
 
 
 
