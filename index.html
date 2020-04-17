@@ -106,6 +106,7 @@
 
                 var newCity = $("<button>").addClass("list-group-item list-group-item-action").text(recentSearchList[i]);
                 searchList.append(newCity);
+                console.log(recentSearchList);
                 //console.log(retrieveSearched);
             }
 
@@ -163,7 +164,7 @@
 
 
         function citySearch(searchCity) {
-            var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&units=imperial&appid=" + APIKey;
+            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&units=imperial&appid=" + APIKey;
             $.ajax({
                 url: queryURL,
                 method: "GET"
