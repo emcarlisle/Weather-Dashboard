@@ -203,7 +203,7 @@
                 });
 
                 var currentWeatherIcon = response.weather[0].icon;
-                var currentWeatherIconURL = "http://openweathermap.org/img/wn/" + currentWeatherIcon + ".png";
+                var currentWeatherIconURL = "https://openweathermap.org/img/wn/" + currentWeatherIcon + ".png";
                 $.ajax({
                     url: currentWeatherIconURL,
                     method: "GET"
